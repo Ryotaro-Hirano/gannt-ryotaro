@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>DHTMLX Gantt Chart - Displaying the critical path in Gantt Chart</title>
+	<meta name="description" content="You can estimate and display a critical path of your project in Gantt Chart, that determines the shortest time that the project can be completed."/>
+	<meta name="keywords" content="dhtmlx, ajax, javascript, library, framework, dhtmlx, web, components, gantt chart, gantt, critical path, demo, sample, project"/>
+
+
+	<script src="gantt/dhtmlxgantt.js?v=4.0" type="text/javascript" charset="utf-8"></script>
+	<script src="gantt/ext/dhtmlxgantt_critical_path.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="gantt/skins/dhtmlxgantt_terrace.css?v=4.0" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	<style type="text/css" media="screen">
+		html, body{
+			margin:0px;
+			padding:0px;
+			height:100%;
+			overflow:hidden;
+		}
+		.gantt_scale_cell.weekend, .gantt_task_cell.weekend{
+			background-color: #EFF5FD;
+		}
+		.gantt_selected .gantt_task_cell.weekend{
+			background-color: #f0e493;
+		}
+	</style>
+</head>
+<body onresize="modSampleHeight()" onload="modSampleHeight()">
+<!--[if lte IE 7]>
+<style type="text/css">div{display:none;}</style>
+<h4 style='text-align:center; font-family:Arial; margin-top:50px;'>Unfortunately dhtmlxGantt 2.0 doesn't support IE6 and IE7 browsers.<br>Please open these demos in different browser or in IE8+.</h3>
+<![endif]-->
+<script>
+	function modSampleHeight(){
+		var headHeight = 140;
+		var sch = document.getElementById("gantt_here");
+		sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
+		var contbox = document.getElementById("contbox");
+		contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
+
+		gantt.setSizes();
+	}
+</script>
+<div style="height:95px;background-color:#3D3D3D;border-bottom:5px solid #828282; overflow:hidden;">
+	<a style="float:left;margin:22px 0 0 25px;" href="04_baselines.html"><img border="0" src="images/btn-left.gif"></a>
+	<div id="contbox" style="float:left;color:white;margin:22px 75px 0 75px; overflow:hidden;font: 17px Arial,Helvetica;color:white">
+		<div style="border-right:5px solid #2D8EB6;color:#2D8EB6;width:175px;height:50px;float:left;text-align:right;padding-right:25px;">Displaying the Critical Path</div>
+		<div style="font-size:12px;padding-left:225px;max-width:500px;">This is a Gantt Chart demo where you can display a critical path.</div>
+		<div style="font-size:12px;padding-left:225px;margin-top:5px;color:#949292;max-width:500px;">
+			Click on “Show Critical Path” and you will see the critical path of the project.
+			It determines the shortest time that the project can be completed.</div>
+	</div>
+	<a style="float:right;margin:22px 25px 0 0;" href="06_grid_config.html"><img border="0" src="images/btn-right.gif"></a>
+</div>
+
+<div style="text-align: center;height: 40px;line-height: 40px;">
+	<button style="height: 34px;line-height: 30px;margin:3px auto" onclick="updateCriticalPath(this)">Hide Critical Path</button>
+</div>
+<div id="gantt_here" style='width:100%; height:100%;'></div>
+<script type="text/javascript">
+	function updateCriticalPath(toggle){
+		gantt.config.highlight_critical_path = !gantt.config.highlight_critical_path;
+		if(gantt.config.highlight_critical_path){
+			toggle.innerHTML = "Hide Critical Path";
+			gantt.config.highlight_critical_path = true;
+		}else{
+			toggle.innerHTML = "Show Critical Path";
+			gantt.config.highlight_critical_path = false;
+		}
+		gantt.render();
+	}
+
+	var demo_tasks = {
+		data: [
+			{ "id": 1, "text": "Office itinerancy", open:true, type:"project" },
+			{ "id": 2, "text": "Office facing", "start_date": "21-07-2014", "duration": "20", "parent": "1" },
+			{ "id": 3, "text": "Furniture installation", "start_date": "21-07-2014", "duration": "5", "parent": "1" },
+			{ "id": 4, "text": "The employee relocation", "start_date": "28-07-2014", "duration": "15", "parent": "1" },
+			{ "id": 5, "text": "Interior office", "start_date": "28-07-2014", "duration": "15", "parent": "1" },
+			{ "id": 6, "text": "Air conditioners installation", "start_date": "18-08-2014", "duration": "2", "parent": "1" },
+			{ "id": 7, "text": "Workplaces preparation", "start_date": "20-08-2014", "duration": "2", "parent": "1" },
+			{ "id": 8, "text": "Preparing workplaces for us", "start_date": "21-07-2014", "duration": "10", "parent": "1" },
+			{ "id": 9, "text": "Workplaces importation", "start_date": "22-08-2014", "duration": "1", "parent": "1" },
+			{ "id": 10, "text": "Analysis" , open:true, type:"project"},
+			{ "id": 11, "text": "Documentation creation", "start_date": "25-08-2014", "duration": "14", "parent": "10" },
+			{ "id": 12, "text": "Software design", "start_date": "25-08-2014", "duration": "10", "parent": "10" },
+			{ "id": 13, "text": "Interface setup", "start_date": "12-09-2014", "duration": "1", "parent": "10" },
+			{ "id": 14, "text": "Development" , open:true, type:"project"},
+			{ "id": 15, "text": "Develop System", "start_date": "15-09-2014", "duration": "5", "parent": "14" },
+			{ "id": 16, "text": "Integrate System", "start_date": "15-09-2014", "duration": "15", "parent": "14" },
+			{ "id": 17, "text": "Test", "start_date": "06-10-2014", "duration": "1", "parent": "14" }
+
+
+		],
+		links: [
+			{ id: "1", source: "3", target: "4", type: "0" },
+			{ id: "2", source: "3", target: "5", type: "0" },
+			{ id: "3", source: "2", target: "6", type: "0" },
+			{ id: "4", source: "4", target: "6", type: "0" },
+			{ id: "5", source: "5", target: "6", type: "0" },
+			{ id: "6", source: "6", target: "7", type: "0" },
+			{ id: "7", source: "7", target: "9", type: "0" },
+			{ id: "8", source: "8", target: "9", type: "0" },
+			{ id: "9", source: "9", target: "10", type: "0" },
+			{ id: "10", source: "9", target: "11", type: "0" },
+			{ id: "11", source: "9", target: "12", type: "0" },
+			{ id: "12", source: "11", target: "13", type: "0" },
+			{ id: "13", source: "12", target: "13", type: "0" },
+			{ id: "14", source: "13", target: "14", type: "0" },
+			{ id: "15", source: "13", target: "15", type: "0" },
+			{ id: "16", source: "15", target: "17", type: "0" },
+			{ id: "17", source: "16", target: "17", type: "0" }
+		]
+	};
+
+	gantt.config.work_time = true;
+	gantt.config.correct_work_time = true;
+	gantt.config.details_on_create = false;
+	gantt.config.scale_unit = "day";
+	gantt.config.duration_unit = "day";
+	gantt.config.date_scale = "%d";
+
+
+	gantt.config.subscales = [
+		{unit:"month", step:1, date:"%F, %Y"}
+	];
+	gantt.config.scale_height = 50;
+
+	gantt.config.row_height = 30;
+	gantt.config.min_column_width = 30;
+	gantt.config.highlight_critical_path = true;
+	gantt.init("gantt_here");
+	gantt.templates.task_cell_class = function(task, date){
+		if(!gantt.isWorkTime(date))
+			return "weekend";
+		return "";
+	};
+	/*gantt.templates.scale_cell_class = function(date){
+		if(!gantt.isWorkTime(date))
+			return "weekend";
+		return "";
+	};*/
+
+	gantt.parse(demo_tasks);
+</script>
+
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-11031269-1', 'auto');
+	ga('send', 'pageview');
+</script>
+<script type="text/javascript">
+	/* <![CDATA[ */
+	var google_conversion_id = 959416068;
+	var google_custom_params = window.google_tag_params;
+	var google_remarketing_only = true;
+	/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+<noscript>
+	<div style="display:inline;">
+		<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/959416068/?guid=ON&amp;script=0"/>
+	</div>
+</noscript>
+</body>
